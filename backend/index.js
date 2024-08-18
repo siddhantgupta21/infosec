@@ -4,6 +4,7 @@ import bodyParser from "body-parser"
 import dotenv from "dotenv";
 import cors from "cors";
 import route from "./routes/userRoute.js";
+import route2 from "./routes/dashRoute.js";
 
 const app = express();
 app.use(bodyParser.json());
@@ -26,3 +27,4 @@ mongoose.connect(URL).then(()=>{
 
 
 app.use("/api", route);
+app.use("/board", route2);

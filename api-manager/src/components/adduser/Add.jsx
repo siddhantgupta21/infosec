@@ -32,10 +32,10 @@ export const Add = () => {
   return (
     <div className='addUser'>
         <Link to={"/inventory"}>Back</Link>
-        <h3>Add new user</h3>
+        <h3>Add new API</h3>
         <form className='addUserForm' onSubmit={submitForm}>
             <div className="inputGroup">
-                <label htmlFor="api_url">First name</label>
+                <label htmlFor="api_url">Enter valid API URL</label>
                 <input type="text" onChange={inputHandler} id="api_url" name="api_url" autoComplete='off' placeholder='Enter your URL...' />
             </div>
             <div className="inputGroup">

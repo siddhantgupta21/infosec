@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from 'react'
+
 import {
   Container,
   Typography,
@@ -20,90 +21,24 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { Link } from 'react-router-dom'
 
 export const Home = () => {
   // Example data for the table
-  const [rows, setRows] = useState([
-    {
-      id: 1,
-      col2: "Customer A",
-      col3: "$500",
-      col4: "High",
-      col5: "01/08/2024",
-      col6: "View",
-    },
-    {
-      id: 2,
-      col2: "Customer B",
-      col3: "$750",
-      col4: "Medium",
-      col5: "03/08/2024",
-      col6: "View",
-    },
-    {
-      id: 3,
-      col2: "Customer C",
-      col3: "$300",
-      col4: "Low",
-      col5: "05/08/2024",
-      col6: "View",
-    },
-    {
-      id: 4,
-      col2: "Customer D",
-      col3: "$400",
-      col4: "High",
-      col5: "07/08/2024",
-      col6: "View",
-    },
-    {
-      id: 5,
-      col2: "Customer E",
-      col3: "$1000",
-      col4: "Medium",
-      col5: "10/08/2024",
-      col6: "View",
-    },
-    {
-      id: 6,
-      col2: "Customer F",
-      col3: "$250",
-      col4: "Low",
-      col5: "12/08/2024",
-      col6: "View",
-    },
-  ]);
+  const [rows, setRows] = useState([]);
 
-  const [openDialog, setOpenDialog] = useState(false);
-  const [editRow, setEditRow] = useState(null);
-  const [dialogData, setDialogData] = useState({});
+  useEffect(()=>{
 
-  const handleEditClick = (row) => {
-    setEditRow(row);
-    setDialogData(row);
-    setOpenDialog(true);
-  };
+    const fetchData = async()=>{
+        const response = await axios.get("http://localhost:8000/board/getapi");
+        setRows(response.data);
+    }
 
-  const handleDeleteClick = (id) => {
-    setRows(rows.filter((row) => row.id !== id));
-  };
+    fetchData();
 
-  const handleDialogClose = () => {
-    setOpenDialog(false);
-    setEditRow(null);
-  };
-
-  const handleDialogChange = (e) => {
-    setDialogData({
-      ...dialogData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSave = () => {
-    setRows(rows.map((row) => (row.id === editRow.id ? dialogData : row)));
-    handleDialogClose();
-  };
+  },[])
 
   // Function to get the color for status
   const getStatusColor = (status) => {
@@ -148,11 +83,11 @@ export const Home = () => {
           <TableBody>
             {rows.map((row) => (
               <TableRow key={row.id}>
-                <TableCell>{row.col2}</TableCell>
-                <TableCell>{row.col3}</TableCell>
+                <TableCell>{row.api_url}</TableCell>
+                <TableCell>{row.vuln}</TableCell>
                 <TableCell>
                   <Chip
-                    label={row.col4}
+                    label={row.status}
                     style={{
                       borderRadius: 15,
                       fontSize: "0.75rem",
@@ -161,15 +96,15 @@ export const Home = () => {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      backgroundColor: getStatusColor(row.col4),
+                      backgroundColor: getStatusColor(row.status),
                       color: "#000", // Text color to ensure visibility
                     }}
                     size="small" // Ensures consistent chip size
                   />
                 </TableCell>
-                <TableCell>{row.col5}</TableCell>
-                <TableCell>{row.col6}</TableCell>
-                <TableCell>{row.col7}</TableCell>
+                <TableCell>{row.description}</TableCell>
+                <TableCell>{row.solution}</TableCell>
+                <TableCell>{row.others}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -177,60 +112,7 @@ export const Home = () => {
       </TableContainer>
 
       {/* Edit Dialog */}
-      <Dialog open={openDialog} onClose={handleDialogClose}>
-        <DialogTitle>Edit Invoice</DialogTitle>
-        <DialogContent>
-          <MuiTextField
-            margin="dense"
-            name="col2"
-            label="Customer"
-            type="text"
-            fullWidth
-            value={dialogData.col2 || ""}
-            onChange={handleDialogChange}
-          />
-          <MuiTextField
-            margin="dense"
-            name="col3"
-            label="Amount"
-            type="text"
-            fullWidth
-            value={dialogData.col3 || ""}
-            onChange={handleDialogChange}
-          />
-          <MuiTextField
-            margin="dense"
-            name="col4"
-            label="Status"
-            type="text"
-            fullWidth
-            value={dialogData.col4 || ""}
-            onChange={handleDialogChange}
-          />
-          <MuiTextField
-            margin="dense"
-            name="col5"
-            label="Date"
-            type="text"
-            fullWidth
-            value={dialogData.col5 || ""}
-            onChange={handleDialogChange}
-          />
-          <MuiTextField
-            margin="dense"
-            name="col6"
-            label="Details"
-            type="text"
-            fullWidth
-            value={dialogData.col6 || ""}
-            onChange={handleDialogChange}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose}>Cancel</Button>
-          <Button onClick={handleSave}>Save</Button>
-        </DialogActions>
-      </Dialog>
+      
     </Container>
   );
 };

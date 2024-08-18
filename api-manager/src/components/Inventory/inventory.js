@@ -53,10 +53,13 @@ export function ApiInventory() {
 
   return (
     <>
-      <Link to={"/add"} className='addButton'>Add User</Link>
-      <TableContainer component={Paper} className='inv-table'>
-        <Table>
-          <TableHead>
+      <div className='button-container'>
+        <Link to={"/add"} className='addButton'>Add API</Link>
+      </div>
+      
+      <TableContainer component={Paper} className="table-wrapper">
+        <Table className="custom-table">
+          <TableHead className='custom-header'>
             <TableRow>
               <TableCell>API URL</TableCell>
               <TableCell>Actions</TableCell>
@@ -66,9 +69,9 @@ export function ApiInventory() {
             {
                 users.map((user, index)=>{
                     return(
-                    <tr key={index}>
-                        <td>{user.api_url}</td>
-                        <td className='actionButtons'>
+                    <tr key={index} className="custom-row">
+                        <td className="custom-cell">{user.api_url}</td>
+                        <td className='actionButtons custom-cell'>
                                 <button onClick={()=> deleteUser(user._id)}><i className="fa-solid fa-trash"><DeleteIcon />
 </i></button>
                         </td>
